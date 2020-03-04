@@ -1,36 +1,44 @@
 import * as core from '@actions/core';
-import exec from 'child_process';
+import * as exec from '@actions/exec';
+import * as path from 'path';
 
 async function run() {
-  try {
-    let version: string = core.getInput('pip-version');
-    var command: string = "";
-    if (version) {
-      if (version.startsWith('2')) {
-          command = 'python2 -m pip';
-      } else if (version.startsWith('3')) {
-          command = 'python3 -m pip';
-      } else {
-          core.setFailed('Unknown python version ' + version);
-          return;
-      }
-    }
+    try {
+        let pythonPath: string | undefined = process.env.pythonLocation;
+        let python: string = '';
+        if (pythonPath !== undefined) {
+            python = path.join(pythonPath, 'python');
+        } else {
+            core.setFailed('Python is not found');
+            return;
+        }
 
-    let packages: string = core.getInput('packages');
-    let cmd: string = `${command} install ${packages}`;
-    console.log(`Running: ${cmd}`);
+        let packages: string = core.getInput('packages');
+        let args: string[] = ['install', packages];
+        console.log(`Running: ${python} ${args.toString()}`);
+        
+        let stdout: string = '';
+        let stderr: string = '';
 
-    exec.exec(cmd,
-        function(error, stdout, stderr) {
-            if (error !== null) {
-                console.log(stdout);
-                console.log(stderr);
-                core.setFailed(error.message);
+        const options = {
+            listeners: {
+                stdout: (data: Buffer) => {
+                    stdout += data.toString();
+                },
+                stderr: (data: Buffer) => {
+                    stderr += data.toString();
+                }
             }
-        });
-  } catch (err) {
-    core.setFailed(err.message);
-  }
+        };
+
+        core.info(stdout);
+        if (stderr.length > 0)
+            core.setFailed(stderr);
+
+        await exec.exec(python, args, options);
+    } catch (err) {
+        core.setFailed(err.message);
+    }
 }
 
 run();
