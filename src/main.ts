@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as path from 'path';
 
-function getStringInput(name: string, options?: core.InputOptions | undefined): string | undefined {
+export function getStringInput(name: string, options?: core.InputOptions | undefined): string | undefined {
     let tmp: string = core.getInput(name, options);
     if (tmp.length > 0) {
         return tmp;
@@ -11,27 +11,27 @@ function getStringInput(name: string, options?: core.InputOptions | undefined): 
     }
 }
 
-function getBooleanInput(name: string, options?: core.InputOptions | undefined): boolean {
+export function getBooleanInput(name: string, options?: core.InputOptions | undefined): boolean {
     let tmp: string = core.getInput(name, options);
     if (tmp == 'true' || tmp == '1') {
         return true;
-    } else if (tmp == 'false' || tmp == '0') {
+    } else if (tmp == 'false' || tmp == '0' || tmp == '') {
         return false;
     } else {
         throw new Error('Invalid value for input ' + name);
     }
 }
 
-let packages: string[] | undefined;
-let requirements: string | undefined;
-let constraints: string | undefined;
-let no_deps: boolean = false;
-let pre: boolean = false;
-let editable: string | undefined;
-let platform: string | undefined;
-let upgrade: boolean = false;
+export let packages: string[] | undefined;
+export let requirements: string | undefined;
+export let constraints: string | undefined;
+export let no_deps: boolean = false;
+export let pre: boolean = false;
+export let editable: string | undefined;
+export let platform: string | undefined;
+export let upgrade: boolean = false;
 
-function processInputs() {
+export function processInputs() {
     let pkgTmp: string | undefined = getStringInput('packages');
     if (pkgTmp) {
         packages = pkgTmp.split(/\n/);
@@ -53,7 +53,7 @@ function processInputs() {
     upgrade = getBooleanInput('upgrade');
 }
 
-function getArgs(): string[] {
+export function getArgs(): string[] {
     let args: string[] = ['-m', 'pip', 'install'];
 
     if (packages) {
@@ -91,7 +91,7 @@ function getArgs(): string[] {
     return args;
 }
 
-async function run() {
+export async function run() {
     try {
         let pythonPath: string | undefined = process.env.pythonLocation;
         let python: string = '';

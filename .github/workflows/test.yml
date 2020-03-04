@@ -1,8 +1,8 @@
 name: Test
 on: [push]
 jobs:
-  test:
-    name: Test
+  functionality:
+    name: Functionality
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -23,3 +23,17 @@ jobs:
           pip-install-test
     - name: Check if package is installed
       run: python -c 'import pip_install_test'
+  code:
+    name: Code
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - name: Install dependencies
+      run: npm install
+    - name: Run tests
+      run: npm test
