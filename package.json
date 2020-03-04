@@ -6,7 +6,7 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
-        "release": "ncc build && git add -f dist/"
+        "release": "ncc build lib/main.js"
     },
     "repository": {
         "type": "git",
