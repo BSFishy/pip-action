@@ -987,22 +987,7 @@ function run() {
             }
             let packages = core.getInput('packages');
             let args = ['-m', 'pip', 'install'].concat(packages.split(' '));
-            console.log(`Running: ${python} ${args.join(' ')}`);
-            let success = true;
-            const options = {
-                listeners: {
-                    stdout: (data) => {
-                        console.info(data.toString());
-                    },
-                    stderr: (data) => {
-                        console.error(data.toString());
-                        success = false;
-                    }
-                }
-            };
-            if (!success)
-                core.setFailed('Package installation failed');
-            yield exec.exec(python, args, options);
+            yield exec.exec(python, args);
         }
         catch (err) {
             core.setFailed(err.message);

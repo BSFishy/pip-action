@@ -15,26 +15,8 @@ async function run() {
 
         let packages: string = core.getInput('packages');
         let args: string[] = ['-m', 'pip', 'install'].concat(packages.split(' '));
-        console.log(`Running: ${python} ${args.join(' ')}`);
-        
-        let success: boolean = true;
 
-        const options = {
-            listeners: {
-                stdout: (data: Buffer) => {
-                    console.info(data.toString());
-                },
-                stderr: (data: Buffer) => {
-                    console.error(data.toString());
-                    success = false;
-                }
-            }
-        };
-
-        if (!success)
-            core.setFailed('Package installation failed');
-
-        await exec.exec(python, args, options);
+        await exec.exec(python, args);
     } catch (err) {
         core.setFailed(err.message);
     }
