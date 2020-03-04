@@ -1,9 +1,6 @@
-// import * as core from '@actions/core';
-var core = require('@actions/core');
+import * as core from '@actions/core';
 // import * as path from 'path';
-var path = require('path');
-// import * as exec from 'child_process';
-var exec = require('child_process').exec;
+import exec from 'child_process';
 
 async function run() {
   try {
@@ -20,15 +17,14 @@ async function run() {
     }
 
     let packages = core.getInput('packages');
-    var child = exec.exec(`${command} ${packages}`,
+    exec.exec(`${command} ${packages}`,
         function(error, stdout, stderr) {
             if (error !== null) {
                 console.log(stdout);
                 console.log(stderr);
-                core.setFailed(error);
+                core.setFailed(error.message);
             }
         });
-    child();
 
     // const matchersPath = path.join(__dirname, '..', '.github');
     // console.log(`##[add-matcher]${path.join(matchersPath, 'python.json')}`);

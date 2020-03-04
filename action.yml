@@ -3,7 +3,7 @@ author: BSFishy
 description: An action to automatically install Pip packages
 runs:
   using: 'node12'
-  main: 'main.js'
+  main: 'dist/index.js'
 branding:
   icon: 'arrow-down'
   color: 'green'

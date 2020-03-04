@@ -1,0 +1,34 @@
+{
+    "name": "pip-action",
+    "version": "1.0.0",
+    "private": true,
+    "description": "An action to automatically install Pip packages",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "release": "ncc build && git add -f dist/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/BSFishy/pip-action.git"
+    },
+    "keywords": [
+        "actions",
+        "node",
+        "setup"
+    ],
+    "author": "BSFishy",
+    "license": "MIT",
+    "dependencies": {
+        "@actions/core": "^1.0.0",
+        "@actions/tool-cache": "^1.0.0",
+        "semver": "^6.1.1"
+    },
+    "devDependencies": {
+        "@actions/io": "^1.0.0",
+        "@types/node": "^12.0.4",
+        "@types/semver": "^6.0.0",
+        "@zeit/ncc": "^0.20.5",
+        "typescript": "^3.5.1"
+    }
+}
