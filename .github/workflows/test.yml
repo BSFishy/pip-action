@@ -18,6 +18,8 @@ jobs:
     - name: Install pip packages
       uses: ./
       with:
-        packages: pip-install-test
+        packages: |
+          pip-install-test
+          pip-install-test
     - name: Check if package is installed
       run: python -c 'import pip_install_test'

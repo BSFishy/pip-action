@@ -9,5 +9,34 @@ branding:
   color: 'green'
 inputs:
   packages:
-    description: 'The packages to install from Pip'
-    required: true
+    description: The packages to install from Pip
+    required: false
+    default: ''
+  requirements:
+    description: A requirements file to install from
+    required: false
+    default: ''
+  constraints:
+    description: A constraints file to use
+    required: false
+    default: ''
+  no-deps:
+    description: Don't install package dependencies
+    required: false
+    default: 'false'
+  pre:
+    description: Include prerelease and development versions
+    required: false
+    default: 'false'
+  editable:
+    description: Install a project in editable mode
+    required: false
+    default: ''
+  platform:
+    description: Only use wheels compatible with a specific platform
+    required: false
+    default: ''
+  upgrade:
+    description: Upgrade all specified packages to the newest available version
+    required: false
+    default: 'false'
