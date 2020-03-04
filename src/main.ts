@@ -34,7 +34,7 @@ export let upgrade: boolean = false;
 export function processInputs() {
     let pkgTmp: string | undefined = getStringInput('packages');
     if (pkgTmp) {
-        packages = pkgTmp.split(/\n/);
+        packages = pkgTmp.split(/\s+/);
     } else {
         packages = undefined;
     }
