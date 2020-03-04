@@ -14,7 +14,7 @@ async function run() {
         }
 
         let packages: string = core.getInput('packages');
-        let args: string[] = ['install', packages];
+        let args: string[] = ['-m', 'pip', 'install', packages];
         console.log(`Running: ${python} ${args.toString()}`);
         
         let stdout: string = '';

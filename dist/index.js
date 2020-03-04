@@ -986,7 +986,7 @@ function run() {
                 return;
             }
             let packages = core.getInput('packages');
-            let args = ['install', packages];
+            let args = ['-m', 'pip', 'install', packages];
             console.log(`Running: ${python} ${args.toString()}`);
             let stdout = '';
             let stderr = '';
