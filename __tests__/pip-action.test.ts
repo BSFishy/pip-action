@@ -3,7 +3,7 @@ import fs = require('fs');
 import os = require('os');
 import path = require('path');
 
-import * as main from '../src/main';
+import main = require('../src/main');
 
 let inSpy: jest.SpyInstance;
 
@@ -31,6 +31,15 @@ function createArgFn<T extends string | boolean | undefined>(key: string, value:
 describe('pip-action', () => {
     beforeEach(() => {
         inSpy = jest.spyOn(core, 'getInput');
+
+        main.packages = undefined;
+        main.requirements = undefined;
+        main.constraints = undefined;
+        main.no_deps = false;
+        main.pre = false;
+        main.editable = undefined;
+        main.platform = undefined;
+        main.upgrade = false;
     });
 
     afterEach(() => {
@@ -144,6 +153,60 @@ describe('pip-action', () => {
     it('checks true upgrade', createArgFn('upgrade', 'true', true, () => main.upgrade));
 
     it('checks false upgrade', createArgFn('upgrade', 'false', false, () => main.upgrade));
+
+
+
+    it('checks args', async () => {
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install']);
+    });
+
+    it('checks packages args', async () => {
+        main.packages = ['value'];
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', 'value']);
+    });
+
+    it('checks requirements args', async () => {
+        main.requirements = 'value';
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--requirement', 'value']);
+    });
+
+    it('checks constraints args', async () => {
+        main.constraints = 'value';
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--constraint', 'value']);
+    });
+
+    it('checks no-deps args', async () => {
+        main.no_deps = true;
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--no-deps']);
+    });
+
+    it('checks pre args', async () => {
+        main.pre = true;
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--pre']);
+    });
+
+    it('checks editable args', async () => {
+        main.editable = 'value';
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--editable', 'value']);
+    });
+
+    it('checks platform args', async () => {
+        main.platform = 'value';
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--platform', 'value']);
+    });
+
+    it('checks upgrade args', async () => {
+        main.upgrade = true;
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--upgrade']);
+    });
 
     // it('', async () => {});
 });

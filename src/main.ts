@@ -56,10 +56,6 @@ export function processInputs() {
 export function getArgs(): string[] {
     let args: string[] = ['-m', 'pip', 'install'];
 
-    if (packages) {
-        args = args.concat(packages);
-    }
-
     if (requirements) {
         args = args.concat('--requirement', requirements);
     }
@@ -86,6 +82,10 @@ export function getArgs(): string[] {
 
     if (upgrade) {
         args = args.concat('--upgrade');
+    }
+
+    if (packages) {
+        args = args.concat(packages);
     }
 
     return args;
