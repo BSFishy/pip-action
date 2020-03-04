@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['2', '3']
+        python-version: [2.7, 3.6, 3.7, 3.8, pypy2, pypy3]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -18,6 +18,6 @@ jobs:
     - name: Install pip packages
       uses: ./
       with:
-        packages: 'pip-install-test'
+        packages: pip-install-test
     - name: Check if package is installed
       run: python -c 'import pip_install_test'
