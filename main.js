@@ -1,9 +1,9 @@
-import * as core from '@actions/core';
-// var core = require('@actions/core');
-import * as path from 'path';
-// var path = require('path');
-import * as exec from 'child_process';
-// var exec = require('child_process').exec;
+// import * as core from '@actions/core';
+var core = require('@actions/core');
+// import * as path from 'path';
+var path = require('path');
+// import * as exec from 'child_process';
+var exec = require('child_process').exec;
 
 async function run() {
   try {
