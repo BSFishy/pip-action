@@ -2,10 +2,10 @@ name: Pip Installer
 author: BSFishy
 description: An action to automatically install Pip packages
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node12'
+  main: 'main.js'
 branding:
-  icon: 'arrow-down'  
+  icon: 'arrow-down'
   color: 'green'
 inputs:
   pip-version:
