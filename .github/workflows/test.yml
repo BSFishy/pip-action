@@ -19,6 +19,5 @@ jobs:
       uses: BSFishy/pip-action@master
       with:
         packages: 'pip-install-test'
-        pip-version: ${{ matrix.python-version }}
     - name: Check if package is installed
       run: python -c 'import pip_install_test'
