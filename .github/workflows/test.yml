@@ -1,0 +1,22 @@
+name: Test
+on: [push]
+jobs:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['2', '3']
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install pip packages
+      uses: BSFishy/pip-action
+      with:
+        packages: 'pip-install-test'
+        pip-version: ${{ matrix.python-version }}
