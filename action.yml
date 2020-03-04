@@ -8,10 +8,6 @@ branding:
   icon: 'arrow-down'
   color: 'green'
 inputs:
-  pip-version:
-    description: 'The version of pip to use. This can be 2 or 3.'
-    required: false
-    default: '3'
   packages:
     description: 'The packages to install from Pip'
     required: true

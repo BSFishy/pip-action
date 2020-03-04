@@ -986,23 +986,22 @@ function run() {
                 return;
             }
             let packages = core.getInput('packages');
-            let args = ['-m', 'pip', 'install', packages];
-            console.log(`Running: ${python} ${args.toString()}`);
-            let stdout = '';
-            let stderr = '';
+            let args = ['-m', 'pip', 'install'].concat(packages.split(' '));
+            console.log(`Running: ${python} ${args.join(' ')}`);
+            let success = true;
             const options = {
                 listeners: {
                     stdout: (data) => {
-                        stdout += data.toString();
+                        console.info(data.toString());
                     },
                     stderr: (data) => {
-                        stderr += data.toString();
+                        console.error(data.toString());
+                        success = false;
                     }
                 }
             };
-            core.info(stdout);
-            if (stderr.length > 0)
-                core.setFailed(stderr);
+            if (!success)
+                core.setFailed('Package installation failed');
             yield exec.exec(python, args, options);
         }
         catch (err) {
