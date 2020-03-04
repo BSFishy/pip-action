@@ -16,7 +16,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install pip packages
-      uses: BSFishy/pip-action
+      uses: BSFishy/pip-action@master
       with:
         packages: 'pip-install-test'
         pip-version: ${{ matrix.python-version }}
