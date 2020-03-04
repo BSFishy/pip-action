@@ -7,7 +7,7 @@
     "scripts": {
         "build": "tsc",
         "test": "jest",
-        "release": "ncc build lib/main.js"
+        "release": "ncc build lib/pip-action.js"
     },
     "repository": {
         "type": "git",

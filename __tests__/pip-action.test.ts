@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
-import fs = require('fs');
-import os = require('os');
-import path = require('path');
+import * as exec from '@actions/exec';
+import * as path from 'path';
 
 import main = require('../src/main');
 
 let inSpy: jest.SpyInstance;
+let execSpy: jest.SpyInstance;
 
 function createInputFn(key: string, value: string): (name: string) => string {
     function inputFn(name: string): string {
@@ -31,6 +31,9 @@ function createArgFn<T extends string | boolean | undefined>(key: string, value:
 describe('pip-action', () => {
     beforeEach(() => {
         inSpy = jest.spyOn(core, 'getInput');
+        execSpy = jest.spyOn(exec, 'exec');
+
+        process.exitCode = core.ExitCode.Success;
 
         main.packages = undefined;
         main.requirements = undefined;
@@ -208,5 +211,24 @@ describe('pip-action', () => {
         expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--upgrade']);
     });
 
-    // it('', async () => {});
+
+
+    it('checks no python', async () => {
+        delete process.env.pythonLocation;
+
+        expect(() => main.run()).not.toThrow();
+        expect(process.exitCode).toEqual(core.ExitCode.Failure);
+    });
+
+    it('checks successful run', async () => {
+        process.env.pythonLocation = 'file';
+        inSpy.mockImplementation((name: string) => name == 'packages' ? 'value' : '');
+        execSpy.mockImplementation((commandLine: string, args?: string[]) => {
+            expect(commandLine).toEqual(path.join('file', 'python'));
+            expect(args).toEqual(['-m', 'pip', 'install', 'value']);
+        });
+
+        expect(() => main.run()).not.toThrow();
+        expect(process.exitCode).toEqual(core.ExitCode.Success);
+    });
 });

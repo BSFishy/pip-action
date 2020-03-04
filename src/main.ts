@@ -94,16 +94,12 @@ export function getArgs(): string[] {
 export async function run() {
     try {
         let pythonPath: string | undefined = process.env.pythonLocation;
-        let python: string = '';
-        if (pythonPath !== undefined) {
-            python = path.join(pythonPath, 'python');
-        } else {
-            core.setFailed('Python is not found');
-            return;
+        if (!pythonPath) {
+            throw new Error('Python is not found');
         }
 
         processInputs();
-
+        let python: string = path.join(pythonPath, 'python');
         let args: string[] = getArgs();
 
         await exec.exec(python, args);
@@ -111,5 +107,3 @@ export async function run() {
         core.setFailed(err.message);
     }
 }
-
-run();

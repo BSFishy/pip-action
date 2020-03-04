@@ -34,7 +34,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(198);
+/******/ 		return __webpack_require__(629);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -982,79 +982,78 @@ function getStringInput(name, options) {
         return undefined;
     }
 }
+exports.getStringInput = getStringInput;
 function getBooleanInput(name, options) {
     let tmp = core.getInput(name, options);
     if (tmp == 'true' || tmp == '1') {
         return true;
     }
-    else if (tmp == 'false' || tmp == '0') {
+    else if (tmp == 'false' || tmp == '0' || tmp == '') {
         return false;
     }
     else {
         throw new Error('Invalid value for input ' + name);
     }
 }
-let packages;
-let requirements;
-let constraints;
-let no_deps = false;
-let pre = false;
-let editable;
-let platform;
-let upgrade = false;
+exports.getBooleanInput = getBooleanInput;
+exports.no_deps = false;
+exports.pre = false;
+exports.upgrade = false;
 function processInputs() {
     let pkgTmp = getStringInput('packages');
     if (pkgTmp) {
-        packages = pkgTmp.split(/\n/);
+        exports.packages = pkgTmp.split(/\s+/);
     }
     else {
-        packages = undefined;
+        exports.packages = undefined;
     }
-    requirements = getStringInput('requirements');
-    if (!packages && !requirements) {
+    exports.requirements = getStringInput('requirements');
+    if (!exports.packages && !exports.requirements) {
         throw new Error('You must specify either packages or a requirements file');
     }
-    constraints = getStringInput('constraints');
-    no_deps = getBooleanInput('no-deps');
-    pre = getBooleanInput('pre');
-    editable = getStringInput('editable');
-    platform = getStringInput('platform');
-    upgrade = getBooleanInput('upgrade');
+    exports.constraints = getStringInput('constraints');
+    exports.no_deps = getBooleanInput('no-deps');
+    exports.pre = getBooleanInput('pre');
+    exports.editable = getStringInput('editable');
+    exports.platform = getStringInput('platform');
+    exports.upgrade = getBooleanInput('upgrade');
 }
+exports.processInputs = processInputs;
 function getArgs() {
     let args = ['-m', 'pip', 'install'];
-    if (packages) {
-        args = args.concat(packages);
+    if (exports.requirements) {
+        args = args.concat('--requirement', exports.requirements);
     }
-    if (requirements) {
-        args = args.concat('--requirement', requirements);
+    if (exports.constraints) {
+        args = args.concat('--constraint', exports.constraints);
     }
-    if (constraints) {
-        args = args.concat('--constraint', constraints);
-    }
-    if (no_deps) {
+    if (exports.no_deps) {
         args = args.concat('--no-deps');
     }
-    if (pre) {
+    if (exports.pre) {
         args = args.concat('--pre');
     }
-    if (editable) {
-        args = args.concat('--editable', editable);
+    if (exports.editable) {
+        args = args.concat('--editable', exports.editable);
     }
-    if (platform) {
-        args = args.concat('--platform', platform);
+    if (exports.platform) {
+        args = args.concat('--platform', exports.platform);
     }
-    if (upgrade) {
+    if (exports.upgrade) {
         args = args.concat('--upgrade');
+    }
+    if (exports.packages) {
+        args = args.concat(exports.packages);
     }
     return args;
 }
+exports.getArgs = getArgs;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let pythonPath = process.env.pythonLocation;
             let python = '';
-            if (pythonPath !== undefined) {
+            if (pythonPath != undefined) {
                 python = path.join(pythonPath, 'python');
             }
             else {
@@ -1070,7 +1069,7 @@ function run() {
         }
     });
 }
-run();
+exports.run = run;
 
 
 /***/ }),
@@ -1394,6 +1393,18 @@ module.exports = require("events");
 /***/ (function(module) {
 
 module.exports = require("path");
+
+/***/ }),
+
+/***/ 629:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const main_1 = __webpack_require__(198);
+main_1.run();
+
 
 /***/ }),
 
