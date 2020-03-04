@@ -17,7 +17,7 @@ async function run() {
     }
 
     let packages = core.getInput('packages');
-    exec.exec(`${command} ${packages}`,
+    exec.exec(`${command} install ${packages}`,
         function(error, stdout, stderr) {
             if (error !== null) {
                 console.log(stdout);
