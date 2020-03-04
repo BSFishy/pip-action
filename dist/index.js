@@ -973,6 +973,82 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const exec = __importStar(__webpack_require__(986));
 const path = __importStar(__webpack_require__(622));
+function getStringInput(name, options) {
+    let tmp = core.getInput(name, options);
+    if (tmp.length > 0) {
+        return tmp;
+    }
+    else {
+        return undefined;
+    }
+}
+function getBooleanInput(name, options) {
+    let tmp = core.getInput(name, options);
+    if (tmp == 'true' || tmp == '1') {
+        return true;
+    }
+    else if (tmp == 'false' || tmp == '0') {
+        return false;
+    }
+    else {
+        throw new Error('Invalid value for input ' + name);
+    }
+}
+let packages;
+let requirements;
+let constraints;
+let no_deps = false;
+let pre = false;
+let editable;
+let platform;
+let upgrade = false;
+function processInputs() {
+    let pkgTmp = getStringInput('packages');
+    if (pkgTmp) {
+        packages = pkgTmp.split(/\n/);
+    }
+    else {
+        packages = undefined;
+    }
+    requirements = getStringInput('requirements');
+    if (!packages && !requirements) {
+        throw new Error('You must specify either packages or a requirements file');
+    }
+    constraints = getStringInput('constraints');
+    no_deps = getBooleanInput('no-deps');
+    pre = getBooleanInput('pre');
+    editable = getStringInput('editable');
+    platform = getStringInput('platform');
+    upgrade = getBooleanInput('upgrade');
+}
+function getArgs() {
+    let args = ['-m', 'pip', 'install'];
+    if (packages) {
+        args = args.concat(packages);
+    }
+    if (requirements) {
+        args = args.concat('--requirement', requirements);
+    }
+    if (constraints) {
+        args = args.concat('--constraint', constraints);
+    }
+    if (no_deps) {
+        args = args.concat('--no-deps');
+    }
+    if (pre) {
+        args = args.concat('--pre');
+    }
+    if (editable) {
+        args = args.concat('--editable', editable);
+    }
+    if (platform) {
+        args = args.concat('--platform', platform);
+    }
+    if (upgrade) {
+        args = args.concat('--upgrade');
+    }
+    return args;
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -985,8 +1061,8 @@ function run() {
                 core.setFailed('Python is not found');
                 return;
             }
-            let packages = core.getInput('packages');
-            let args = ['-m', 'pip', 'install'].concat(packages.split(' '));
+            processInputs();
+            let args = getArgs();
             yield exec.exec(python, args);
         }
         catch (err) {

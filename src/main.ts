@@ -34,7 +34,7 @@ let upgrade: boolean = false;
 function processInputs() {
     let pkgTmp: string | undefined = getStringInput('packages');
     if (pkgTmp) {
-        packages = pkgTmp.split(' ');
+        packages = pkgTmp.split(/\n/);
     } else {
         packages = undefined;
     }
