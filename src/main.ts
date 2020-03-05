@@ -30,6 +30,7 @@ export let pre: boolean = false;
 export let editable: string | undefined;
 export let platform: string | undefined;
 export let upgrade: boolean = false;
+export let extra: string | undefined;
 
 export function processInputs() {
     let pkgTmp: string | undefined = getStringInput('packages');
@@ -51,6 +52,7 @@ export function processInputs() {
     editable = getStringInput('editable');
     platform = getStringInput('platform');
     upgrade = getBooleanInput('upgrade');
+    extra = getStringInput('extra');
 }
 
 export function getArgs(): string[] {
@@ -82,6 +84,10 @@ export function getArgs(): string[] {
 
     if (upgrade) {
         args = args.concat('--upgrade');
+    }
+
+    if (extra) {
+        args = args.concat(extra);
     }
 
     if (packages) {

@@ -1017,6 +1017,7 @@ function processInputs() {
     exports.editable = getStringInput('editable');
     exports.platform = getStringInput('platform');
     exports.upgrade = getBooleanInput('upgrade');
+    exports.extra = getStringInput('extra');
 }
 exports.processInputs = processInputs;
 function getArgs() {
@@ -1042,6 +1043,9 @@ function getArgs() {
     if (exports.upgrade) {
         args = args.concat('--upgrade');
     }
+    if (exports.extra) {
+        args = args.concat(exports.extra);
+    }
     if (exports.packages) {
         args = args.concat(exports.packages);
     }
@@ -1052,15 +1056,11 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let pythonPath = process.env.pythonLocation;
-            let python = '';
-            if (pythonPath != undefined) {
-                python = path.join(pythonPath, 'python');
-            }
-            else {
-                core.setFailed('Python is not found');
-                return;
+            if (!pythonPath) {
+                throw new Error('Python is not found');
             }
             processInputs();
+            let python = path.join(pythonPath, 'python');
             let args = getArgs();
             yield exec.exec(python, args);
         }

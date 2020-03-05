@@ -43,6 +43,7 @@ describe('pip-action', () => {
         main.editable = undefined;
         main.platform = undefined;
         main.upgrade = false;
+        main.extra = undefined;
     });
 
     afterEach(() => {
@@ -96,6 +97,7 @@ describe('pip-action', () => {
 
         expect(() => main.getBooleanInput('')).toThrow();
     });
+
 
 
     it('checks no arguments', async () => {
@@ -158,6 +160,11 @@ describe('pip-action', () => {
     it('checks false upgrade', createArgFn('upgrade', 'false', false, () => main.upgrade));
 
 
+    it('checks empty extra', createArgFn('extra', '', undefined, () => main.extra));
+
+    it('checks extra', createArgFn('extra', 'value', 'value', () => main.extra));
+
+
 
     it('checks args', async () => {
         expect(main.getArgs()).toEqual(['-m', 'pip', 'install']);
@@ -209,6 +216,12 @@ describe('pip-action', () => {
         main.upgrade = true;
         
         expect(main.getArgs()).toEqual(['-m', 'pip', 'install', '--upgrade']);
+    });
+
+    it('checks extra args', async () => {
+        main.extra = 'value';
+        
+        expect(main.getArgs()).toEqual(['-m', 'pip', 'install', 'value']);
     });
 
 

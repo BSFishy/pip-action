@@ -40,3 +40,7 @@ inputs:
     description: Upgrade all specified packages to the newest available version
     required: false
     default: 'false'
+  extra:
+    description: Extra inputs to pass to pip
+    required: false
+    default: ''
