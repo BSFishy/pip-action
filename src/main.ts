@@ -2,6 +2,8 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as path from 'path';
 
+var hasbin = require('hasbin');
+
 export function getStringInput(name: string, options?: core.InputOptions | undefined): string | undefined {
     let tmp: string = core.getInput(name, options);
     if (tmp.length > 0) {
@@ -99,13 +101,20 @@ export function getArgs(): string[] {
 
 export async function run() {
     try {
-        let pythonPath: string | undefined = process.env.pythonLocation;
-        if (!pythonPath) {
-            throw new Error('Python is not found');
+        let python: string;
+        let envLocation: string | undefined = process.env.pythonLocation;
+
+        if (envLocation) {
+            python = path.join(envLocation, 'python');
+        } else {
+            if (hasbin.sync('python')) {
+                python = 'python';
+            } else {
+                throw new Error('Python could not be found');
+            }
         }
 
         processInputs();
-        let python: string = path.join(pythonPath, 'python');
         let args: string[] = getArgs();
 
         await exec.exec(python, args);

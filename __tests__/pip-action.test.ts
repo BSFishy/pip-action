@@ -2,10 +2,12 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as path from 'path';
 
+var hasbin = require('hasbin');
 import main = require('../src/main');
 
 let inSpy: jest.SpyInstance;
 let execSpy: jest.SpyInstance;
+let hasbinSpy: jest.SpyInstance;
 
 function createInputFn(key: string, value: string): (name: string) => string {
     function inputFn(name: string): string {
@@ -32,6 +34,7 @@ describe('pip-action', () => {
     beforeEach(() => {
         inSpy = jest.spyOn(core, 'getInput');
         execSpy = jest.spyOn(exec, 'exec');
+        hasbinSpy = jest.spyOn(hasbin, 'sync');
 
         process.exitCode = core.ExitCode.Success;
 
@@ -228,12 +231,26 @@ describe('pip-action', () => {
 
     it('checks no python', async () => {
         delete process.env.pythonLocation;
+        hasbinSpy.mockImplementation(() => false);
 
         expect(() => main.run()).not.toThrow();
         expect(process.exitCode).toEqual(core.ExitCode.Failure);
     });
 
-    it('checks successful run', async () => {
+    it('checks path python run', async () => {
+        delete process.env.pythonLocation;
+        hasbinSpy.mockImplementation(() => true);
+        inSpy.mockImplementation((name: string) => name == 'packages' ? 'value' : '');
+        execSpy.mockImplementation((commandLine: string, args?: string[]) => {
+            expect(commandLine).toEqual('python');
+            expect(args).toEqual(['-m', 'pip', 'install', 'value']);
+        });
+
+        expect(() => main.run()).not.toThrow();
+        expect(process.exitCode).toEqual(core.ExitCode.Success);
+    });
+
+    it('checks env python run', async () => {
         process.env.pythonLocation = 'file';
         inSpy.mockImplementation((name: string) => name == 'packages' ? 'value' : '');
         execSpy.mockImplementation((commandLine: string, args?: string[]) => {
