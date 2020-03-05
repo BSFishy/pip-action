@@ -211,6 +211,28 @@ extra: ''      # python -m pip install package1
 extra: --user  # python -m pip install --user package1
 ```
 
+### Additional info
+Here is just a little bit of additional information to explain some things that may not be trivial.
+
+#### Python location
+It is highly recommended that you use the [setup-python](https://github.com/actions/setup-python) action to install Python.
+This streamlines the process and makes sure that you have a valid Python installed and located.
+
+This action will automatically detect if Python is installed in 1 of two ways.
+Firstly, it checks the `pythonLocation` environment variable.
+This is set by the `setup-python` action, and is a directory pointing to the Python installation.
+
+Secondly, if the `setup-python` action is not used, the path will be checked for Python.
+If Python is found in the path environment variable, this action will use that version.
+Otherwise, an error is thrown.
+
+#### Empty strings
+Empty strings are used to signify no input.
+Github Actions only allow string key/value inputs, so inputs are always strings.
+Inputs that are not specified automatically return an empty string.
+Because of this, we use an empty string to signify an input has no value.
+For most options, this will cause the argument to not appear in the final command.
+
 ## License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
