@@ -14,7 +14,7 @@ function createInputFn(key: string, value: string): (name: string) => string {
         return name == key ? value : '';
     }
 
-    if (key == 'packages' || key == 'requirements') {
+    if (key == 'packages' || key == 'requirements' || key == 'editable') {
         return inputFn;
     } else {
         return (name: string) => name == 'packages' ? 'value' : inputFn(name);
@@ -124,13 +124,9 @@ describe('pip-action', () => {
         expect(main.packages).toEqual(['value1', 'value2']);
     });
 
+    it('checks requirements', createArgFn('requirements', 'value', 'value', () => main.requirements));
 
-    it('checks requirements', async () => {
-        inSpy.mockImplementation(createInputFn('requirements', 'value'));
-
-        expect(() => main.processInputs()).not.toThrow();
-        expect(main.requirements).toEqual('value');
-    });
+    it('checks editable', createArgFn('editable', 'value', 'value', () => main.editable));
 
 
     it('checks empty constraints', createArgFn('constraints', '', undefined, () => main.constraints));
@@ -146,11 +142,6 @@ describe('pip-action', () => {
     it('checks true pre', createArgFn('pre', 'true', true, () => main.pre));
 
     it('checks false pre', createArgFn('pre', 'false', false, () => main.pre));
-
-
-    it('checks empty editable', createArgFn('editable', '', undefined, () => main.editable));
-
-    it('checks editable', createArgFn('editable', 'value', 'value', () => main.editable));
 
 
     it('checks empty platform', createArgFn('platform', '', undefined, () => main.platform));

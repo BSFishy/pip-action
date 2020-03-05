@@ -43,15 +43,15 @@ export function processInputs() {
     }
 
     requirements = getStringInput('requirements');
+    editable = getStringInput('editable');
 
-    if (!packages && !requirements) {
-        throw new Error('You must specify either packages or a requirements file');
+    if (!packages && !requirements && !editable) {
+        throw new Error('You must specify either packages, a requirements file, or an editable package');
     }
 
     constraints = getStringInput('constraints');
     no_deps = getBooleanInput('no-deps');
     pre = getBooleanInput('pre');
-    editable = getStringInput('editable');
     platform = getStringInput('platform');
     upgrade = getBooleanInput('upgrade');
     extra = getStringInput('extra');

@@ -1009,13 +1009,13 @@ function processInputs() {
         exports.packages = undefined;
     }
     exports.requirements = getStringInput('requirements');
-    if (!exports.packages && !exports.requirements) {
-        throw new Error('You must specify either packages or a requirements file');
+    exports.editable = getStringInput('editable');
+    if (!exports.packages && !exports.requirements && !exports.editable) {
+        throw new Error('You must specify either packages, a requirements file, or an editable package');
     }
     exports.constraints = getStringInput('constraints');
     exports.no_deps = getBooleanInput('no-deps');
     exports.pre = getBooleanInput('pre');
-    exports.editable = getStringInput('editable');
     exports.platform = getStringInput('platform');
     exports.upgrade = getBooleanInput('upgrade');
     exports.extra = getStringInput('extra');
