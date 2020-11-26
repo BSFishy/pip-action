@@ -205,7 +205,7 @@ These are extra options that may not be provided by independent inputs to this a
 It does not correspond to any pip arguments.
 The input is passed directly to pip without any formatting.
 
-**Exampels:**
+**Examples:**
 ```yaml
 extra: ''      # python -m pip install package1
 extra: --user  # python -m pip install --user package1
