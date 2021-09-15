@@ -1,5 +1,5 @@
 name: Pip Installer
-author: BSFishy
+author: Skydustintelligence
 description: An action to automatically install Pip packages
 runs:
   using: 'node12'
